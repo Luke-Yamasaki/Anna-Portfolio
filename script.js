@@ -119,64 +119,52 @@ const placeholderDescription = [
 
 const works = [
   {
-    index: 0,
     type: "image",
     src: "assets/grid/01-vogue-hong-kong.webp",
     label: "Vogue Hong Kong",
-    description: placeholderDescription,
   },
   {
-    index: 1,
     type: "image",
     src: "assets/grid/02-oscar-de-la-renta.webp",
     label: "Oscar De La Renta",
-    description: placeholderDescription,
   },
   {
-    index: 2,
     type: "image",
     src: "assets/grid/03-one-of-ritz-carlton-nomad.webp",
     label: "One Of x Ritz-carlton Nomad",
-    description: placeholderDescription,
   },
   {
-    index: 3,
     type: "video",
     src: "assets/grid/07-kangol.mp4",
     poster: "assets/grid/07-kangol.webp",
     label: "Kangol",
-    description: placeholderDescription,
   },
   {
-    index: 4,
     type: "image",
     src: "assets/grid/04-one-of.webp",
     label: "One Of",
-    description: placeholderDescription,
   },
   {
-    index: 5,
     type: "video",
     src: "assets/grid/08-gh-bass.mp4",
     poster: "assets/grid/08-gh-bass.webp",
     label: "G.H. Bass",
-    description: placeholderDescription,
   },
   {
-    index: 6,
     type: "image",
     src: "assets/grid/05-kaltblut.webp",
     label: "KALTBLUT",
-    description: placeholderDescription,
   },
   {
-    index: 7,
     type: "image",
     src: "assets/grid/06-nili-lotan.webp",
     label: "NILI LOTAN",
-    description: placeholderDescription,
   },
-];
+].map((work, index) => ({
+  ...work,
+  index,
+  description: work.description ?? placeholderDescription,
+}));
 
 const packWorksForMobile = (items) => {
   const packed = [];
@@ -213,6 +201,39 @@ const mobileOrderByIndex = new Map(
   packWorksForMobile(works).map((work, order) => [work.index, order])
 );
 
+const createWorkMedia = (work, { preview = false } = {}) => {
+  if (work.type === "video") {
+    const video = document.createElement("video");
+    video.src = work.src;
+    video.poster = work.poster;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+
+    if (preview) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.loop = true;
+      video.autoplay = !prefersReducedMotion;
+      video.preload = "auto";
+      video.setAttribute("muted", "");
+      video.setAttribute("aria-hidden", "true");
+      if (!prefersReducedMotion) {
+        video.play().catch(() => {});
+      }
+    } else {
+      video.controls = true;
+      video.setAttribute("aria-label", work.label);
+    }
+
+    return video;
+  }
+
+  const image = document.createElement("img");
+  image.src = work.src;
+  image.alt = work.label;
+  return image;
+};
+
 const mediaGrid = document.querySelector(".media-grid");
 
 if (mediaGrid) {
@@ -232,30 +253,7 @@ if (mediaGrid) {
 
     const frame = document.createElement("div");
     frame.className = "media-item__frame";
-
-    if (work.type === "video") {
-      const video = document.createElement("video");
-      video.src = work.src;
-      video.poster = work.poster;
-      video.muted = true;
-      video.defaultMuted = true;
-      video.playsInline = true;
-      video.loop = true;
-      video.autoplay = !prefersReducedMotion;
-      video.preload = "auto";
-      video.setAttribute("muted", "");
-      video.setAttribute("playsinline", "");
-      video.setAttribute("aria-hidden", "true");
-      if (!prefersReducedMotion) {
-        video.play().catch(() => {});
-      }
-      frame.appendChild(video);
-    } else {
-      const image = document.createElement("img");
-      image.src = work.src;
-      image.alt = work.label;
-      frame.appendChild(image);
-    }
+    frame.appendChild(createWorkMedia(work, { preview: true }));
 
     const label = document.createElement("p");
     label.className = "media-item__label";
@@ -324,22 +322,7 @@ const renderDialog = (index) => {
   if (!work || !dialogMedia || !dialogLabel || !dialogDescription) return;
 
   currentIndex = work.index;
-  dialogMedia.replaceChildren();
-
-  if (work.type === "video") {
-    const video = document.createElement("video");
-    video.src = work.src;
-    video.poster = work.poster;
-    video.controls = true;
-    video.playsInline = true;
-    video.setAttribute("aria-label", work.label);
-    dialogMedia.appendChild(video);
-  } else {
-    const image = document.createElement("img");
-    image.src = work.src;
-    image.alt = work.label;
-    dialogMedia.appendChild(image);
-  }
+  dialogMedia.replaceChildren(createWorkMedia(work));
 
   dialogLabel.textContent = work.label;
   dialogDescription.replaceChildren(
@@ -366,12 +349,12 @@ const openWork = (index) => {
   dialogClose?.focus({ preventScroll: true });
 };
 
+const pauseDialogMedia = () => {
+  dialogMedia?.querySelector("video")?.pause();
+};
+
 const closeWork = () => {
   if (!dialog?.open) return;
-  const playing = dialogMedia?.querySelector("video");
-  if (playing) {
-    playing.pause();
-  }
   dialog.close();
 };
 
@@ -442,9 +425,6 @@ dialog?.addEventListener("click", (event) => {
 });
 
 dialog?.addEventListener("close", () => {
-  const playing = dialogMedia?.querySelector("video");
-  if (playing) {
-    playing.pause();
-  }
+  pauseDialogMedia();
   unlockPage();
 });
