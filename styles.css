@@ -77,9 +77,8 @@ body {
 .site-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 2.5rem;
+  font-weight: 900;
 }
 
 .site-main {
@@ -87,6 +86,12 @@ body {
   flex-direction: column;
   gap: var(--gap);
   padding: var(--pad);
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
 }
 
 .hero {
@@ -142,17 +147,18 @@ body {
   min-width: 2.5rem;
   min-height: 2.5rem;
   padding: 0.35rem 0.7rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--frame);
+  border-radius: 0.25rem;
   background: transparent;
-  color: var(--ink);
+  color: var(--slate);
   font-family: inherit;
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
 }
 
 .carousel-controls__btn:hover {
-  background: var(--ink);
+  background: var(--slate);
   color: var(--paper);
 }
 
@@ -275,6 +281,7 @@ body {
   max-height: min(85dvh, 90vh);
   padding: 2.5rem 1.5rem 1.5rem;
   border: 1px solid var(--frame);
+  border-radius: 0.5rem;
   background: var(--paper);
   color: var(--ink);
   overflow: hidden;
@@ -286,7 +293,7 @@ body {
 }
 
 .work-dialog::backdrop {
-  background: rgb(20 20 20 / 0.62);
+  background: rgb(20 20 20 / 0.7);
 }
 
 .work-dialog__close {
@@ -311,32 +318,31 @@ body {
 .work-dialog__body {
   display: flex;
   flex-direction: row;
-  align-items: center;
   flex: 1 1 auto;
   gap: 1rem;
   min-height: 0;
+  align-items: center;
 }
 
 .work-dialog__nav {
-  flex: 0 0 auto;
-  align-self: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.5rem;
-  min-height: 2.5rem;
+  max-width: 2.5rem;
+  max-height: 2.5rem;
   padding: 0.35rem 0.7rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--frame);
+  border-radius: 0.25rem;
   background: transparent;
-  color: var(--ink);
+  color: var(--slate);
   font-family: inherit;
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
 }
 
 .work-dialog__nav:hover {
-  background: var(--ink);
+  background: var(--slate);
   color: var(--paper);
 }
 
@@ -348,56 +354,60 @@ body {
   min-width: 0;
   min-height: 0;
   flex: 1;
+  max-height: 100%;
 }
 
 .work-dialog__media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex: 1 1 55%;
   min-width: 0;
   min-height: 0;
-  background: var(--frame);
 }
 
 .work-dialog__media img,
 .work-dialog__media video {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  background: var(--ink);
+  object-position: left center;
 }
 
 .work-dialog__copy {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
+  justify-content: flex-start;
   gap: 0.75rem;
   flex: 1 1 45%;
-  min-width: 0;
+  min-width: min(22rem, 100%);
   min-height: 0;
   overflow: hidden;
 }
 
 .work-dialog__label {
   margin: 0;
+  flex: 0 0 auto;
+  width: 100%;
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
+  overflow-wrap: break-word;
 }
 
 .work-dialog__description {
   flex: 1 1 auto;
   min-height: 0;
+  width: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
   padding-right: 0.25rem;
-  color: var(--slate);
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 40rem) {
+  .work-dialog {
+    height: 70vh;
+  }
   .work-dialog__center {
     flex-direction: column;
   }
@@ -405,6 +415,7 @@ body {
   .work-dialog__media {
     flex: 1 1 50%;
     max-height: 50%;
+    width: 80%;
   }
 
   .work-dialog__copy {
@@ -418,12 +429,12 @@ body {
   gap: 0.5rem;
   padding: var(--pad);
   border-top: 1px solid var(--frame);
+  font-family: var(--font-display);
 }
 
 .site-footer__bio {
   grid-column: 2;
   margin: 0;
-  color: var(--slate);
   font-size: 2rem;
 }
 
@@ -450,17 +461,24 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0.65rem 1rem;
-  border: 1px solid var(--ink);
-  background: var(--ink);
-  color: var(--paper);
+  border: 1px solid var(--frame);
+  color: black;
   font-family: inherit;
   font-size: 1rem;
   text-decoration: none;
+  width: fit-content;
+  border-radius: 0.25rem;
+  transform: rotate(0deg) scale(1);
+  transition:
+    transform 0.45s ease,
+    background-color 0.45s ease,
+    color 0.45s ease;
 }
 
 .site-footer__contact:hover {
-  background: var(--leader);
-  border-color: var(--leader);
+  background: var(--ink);
+  color: var(--paper);
+  transform: rotate(-10deg) scale(0.9);
 }
 
 @media (max-width: 40rem) {
@@ -478,5 +496,13 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .site-footer__contact {
+    transition: none;
+  }
+
+  .site-footer__contact:hover {
+    transform: none;
   }
 }
