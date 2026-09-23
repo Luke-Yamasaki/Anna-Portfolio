@@ -195,8 +195,92 @@ if (mediaGrid) {
     label.textContent = work.label;
 
     item.append(frame, label);
+    item.tabIndex = 0;
+    item.setAttribute("role", "button");
+    item.setAttribute("aria-label", `Open ${work.label}`);
     fragment.appendChild(item);
   });
 
   mediaGrid.appendChild(fragment);
 }
+
+const dialog = document.querySelector(".work-dialog");
+const dialogMedia = document.querySelector(".work-dialog__media");
+const dialogLabel = document.querySelector(".work-dialog__label");
+const dialogDescription = document.querySelector(".work-dialog__description");
+const dialogClose = document.querySelector(".work-dialog__close");
+
+let currentIndex = 0;
+
+const renderDialog = (index) => {
+  const work = works[index];
+  if (!work || !dialogMedia || !dialogLabel || !dialogDescription) return;
+
+  currentIndex = work.index;
+  dialogMedia.replaceChildren();
+
+  if (work.type === "video") {
+    const video = document.createElement("video");
+    video.src = work.src;
+    video.poster = work.poster;
+    video.controls = true;
+    video.playsInline = true;
+    video.setAttribute("aria-label", work.label);
+    dialogMedia.appendChild(video);
+  } else {
+    const image = document.createElement("img");
+    image.src = work.src;
+    image.alt = work.label;
+    dialogMedia.appendChild(image);
+  }
+
+  dialogLabel.textContent = work.label;
+  dialogDescription.textContent = work.description;
+};
+
+const openWork = (index) => {
+  if (!dialog) return;
+  renderDialog(index);
+  dialog.showModal();
+};
+
+const closeWork = () => {
+  if (!dialog?.open) return;
+  const playing = dialogMedia?.querySelector("video");
+  if (playing) {
+    playing.pause();
+  }
+  dialog.close();
+};
+
+if (mediaGrid) {
+  mediaGrid.addEventListener("click", (event) => {
+    const item = event.target.closest(".media-item");
+    if (!item) return;
+    openWork(Number(item.dataset.index));
+  });
+
+  mediaGrid.addEventListener("keydown", (event) => {
+    const item = event.target.closest(".media-item");
+    if (!item) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openWork(Number(item.dataset.index));
+    }
+  });
+}
+
+dialogClose?.addEventListener("click", closeWork);
+
+dialog?.addEventListener("click", (event) => {
+  if (event.target === dialog) {
+    closeWork();
+  }
+});
+
+dialog?.addEventListener("close", () => {
+  const playing = dialogMedia?.querySelector("video");
+  if (playing) {
+    playing.pause();
+  }
+});

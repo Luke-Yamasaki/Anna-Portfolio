@@ -66,6 +66,22 @@
     </main>
 
     <footer class="site-footer"></footer>
+
+    <dialog class="work-dialog" aria-labelledby="work-dialog-label">
+      <button type="button" class="work-dialog__close" aria-label="Close">
+        <span aria-hidden="true">X</span>
+      </button>
+      <div class="work-dialog__body">
+        <div class="work-dialog__center">
+          <div class="work-dialog__media"></div>
+          <div class="work-dialog__copy">
+            <p id="work-dialog-label" class="work-dialog__label"></p>
+            <div class="work-dialog__description"></div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
     <script src="script.js" defer></script>
   </body>
 </html>
