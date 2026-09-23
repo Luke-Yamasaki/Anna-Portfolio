@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="Placeholder photograph of a stairwell">
+  <rect width="800" height="1000" fill="#3a332c"/>
+  <polygon points="0,200 800,80 800,180 0,300" fill="#d8d4cb"/>
+  <polygon points="0,420 800,300 800,400 0,520" fill="#c4b8a6"/>
+  <polygon points="0,640 800,520 800,620 0,740" fill="#b7aa96"/>
+  <polygon points="0,860 800,740 800,840 0,960" fill="#9d917e"/>
+  <rect x="620" y="0" width="28" height="1000" fill="#141414"/>
+</svg>

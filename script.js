@@ -75,3 +75,128 @@ if (carousel && track) {
 
   requestAnimationFrame(tick);
 }
+
+const works = [
+  {
+    index: 0,
+    type: "image",
+    src: "assets/grid-01.svg",
+    label: "Hallway, noon",
+    description:
+      "A narrow residential hallway photographed at midday. The window at the far end is the only light source, and the floor falls into a hard shadow. Placeholder text for a longer project note that would describe process, location, and the sequence this still belongs to.",
+  },
+  {
+    index: 1,
+    type: "image",
+    src: "assets/grid-02.svg",
+    label: "Folded cloth",
+    description:
+      "Draped fabric photographed as a landscape rather than a still life. Folds read as terrain. Placeholder copy stands in for a caption about material, dye, and the afternoon the picture was made.",
+  },
+  {
+    index: 2,
+    type: "image",
+    src: "assets/grid-03.svg",
+    label: "Kitchen sink",
+    description:
+      "A stainless basin, a faucet, and a single red object left on the rim. Domestic space treated with the same attention as a set. Placeholder description for production notes and print details.",
+  },
+  {
+    index: 3,
+    type: "video",
+    src: "assets/grid-video-01.mp4",
+    poster: "assets/grid-video-01.svg",
+    label: "Platform interval",
+    description:
+      "A short loop from a train platform between arrivals. The red safety line holds the frame. Placeholder text for runtime, camera, and the sound that would play with the finished cut.",
+  },
+  {
+    index: 4,
+    type: "image",
+    src: "assets/grid-04.svg",
+    label: "Bus window",
+    description:
+      "Looking out from a moving bus. The split pane and the red grab rail keep the interior in the picture. Placeholder caption for the route and the hour it was taken.",
+  },
+  {
+    index: 5,
+    type: "image",
+    src: "assets/grid-05.svg",
+    label: "Backyard fence",
+    description:
+      "Uneven pale slats against a green yard and a washed-out sky. Placeholder notes about the neighborhood, the season, and why this fence kept appearing in the edit.",
+  },
+  {
+    index: 6,
+    type: "video",
+    src: "assets/grid-video-02.mp4",
+    poster: "assets/grid-video-02.svg",
+    label: "Laundry line",
+    description:
+      "Clothes on a line, shifting in a light wind. The shot holds longer than the gesture. Placeholder description for a moving-image study of ordinary hanging cloth.",
+  },
+  {
+    index: 7,
+    type: "image",
+    src: "assets/grid-06.svg",
+    label: "Bathroom mirror",
+    description:
+      "A figure reduced to a silhouette in a medicine-cabinet mirror. The red bottle is the only saturated object. Placeholder text for a self-portrait series made in rented rooms.",
+  },
+  {
+    index: 8,
+    type: "image",
+    src: "assets/grid-07.svg",
+    label: "Stairwell",
+    description:
+      "Concrete treads and a vertical handrail cutting the frame. Placeholder copy for a building study: address, floor count, and the time of day the light hits the landings.",
+  },
+  {
+    index: 9,
+    type: "image",
+    src: "assets/grid-08.svg",
+    label: "Fruit bowl",
+    description:
+      "A tabletop arrangement after lunch. Fruit, a gray bowl, a paper field. Placeholder description for a still-life sequence shot in the studio over several afternoons.",
+  },
+];
+
+const mediaGrid = document.querySelector(".media-grid");
+
+if (mediaGrid) {
+  const fragment = document.createDocumentFragment();
+
+  works.forEach((work) => {
+    const item = document.createElement("article");
+    item.className = `media-item media-item--${work.type}`;
+    item.dataset.index = String(work.index);
+
+    const frame = document.createElement("div");
+    frame.className = "media-item__frame";
+
+    if (work.type === "video") {
+      const video = document.createElement("video");
+      video.src = work.src;
+      video.poster = work.poster;
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "metadata";
+      video.setAttribute("aria-hidden", "true");
+      frame.appendChild(video);
+    } else {
+      const image = document.createElement("img");
+      image.src = work.src;
+      image.alt = work.label;
+      frame.appendChild(image);
+    }
+
+    const label = document.createElement("p");
+    label.className = "media-item__label";
+    label.textContent = work.label;
+
+    item.append(frame, label);
+    fragment.appendChild(item);
+  });
+
+  mediaGrid.appendChild(fragment);
+}
