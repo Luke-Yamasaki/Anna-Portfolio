@@ -412,13 +412,69 @@ body {
   overflow-wrap: break-word;
 }
 
+.work-dialog__description-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.work-dialog__description-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.6rem;
+  bottom: 0;
+  height: 3rem;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 90% at 50% 100%,
+      rgb(244 243 238 / 0.95) 0%,
+      transparent 70%
+    ),
+    linear-gradient(to top, var(--paper) 15%, transparent);
+  transition: opacity 0.2s ease;
+}
+
+.work-dialog__description-wrap.is-overflowing:not(.is-scrolled-end)::after {
+  opacity: 1;
+}
+
 .work-dialog__description {
   flex: 1 1 auto;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding-right: 0.25rem;
+  padding-right: 0.5rem;
   overflow-wrap: break-word;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--slate) var(--frame);
+}
+
+.work-dialog__description::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+.work-dialog__description::-webkit-scrollbar-track {
+  background: var(--frame);
+  border-radius: 999px;
+}
+
+.work-dialog__description::-webkit-scrollbar-thumb {
+  background: var(--slate);
+  border-radius: 999px;
+}
+
+.work-dialog__description p {
+  margin: 0 0 0.75rem;
+}
+
+.work-dialog__description p:last-child {
+  margin-bottom: 0;
 }
 
 @media (min-width: 64.01rem) {
@@ -430,12 +486,12 @@ body {
     justify-content: center;
   }
 
-  .work-dialog__center:has(video) .work-dialog__description {
+  .work-dialog__center:has(video) .work-dialog__description-wrap {
     flex: 0 1 auto;
   }
 }
 
-@media (max-width: 64rem) {
+@media (max-width: 80rem) {
   .work-dialog {
     height: 70vh;
   }
@@ -460,10 +516,30 @@ body {
     object-position: left center;
   }
 
+  .work-dialog__center:has(video) .work-dialog__media {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .work-dialog__center:has(video) .work-dialog__media video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
   .work-dialog__copy {
     flex: 1 1 45%;
     width: 100%;
     max-height: 45%;
+  }
+
+  .work-dialog__center:has(video) .work-dialog__copy {
+    flex: 1 1 auto;
+    max-height: none;
+    justify-content: flex-start;
   }
 }
 

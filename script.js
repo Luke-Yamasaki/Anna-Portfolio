@@ -111,29 +111,33 @@ if (carousel && track) {
   requestAnimationFrame(tick);
 }
 
+const placeholderDescription = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.",
+];
+
 const works = [
   {
     index: 0,
     type: "image",
     src: "assets/grid/01-vogue-hong-kong.webp",
     label: "Vogue Hong Kong",
-    description:
-      "Makeup by Anna Kurihara for Vogue Hong Kong.",
+    description: placeholderDescription,
   },
   {
     index: 1,
     type: "image",
     src: "assets/grid/02-oscar-de-la-renta.webp",
     label: "Oscar De La Renta",
-    description: "Makeup by Anna Kurihara for Oscar De La Renta.",
+    description: placeholderDescription,
   },
   {
     index: 2,
     type: "image",
     src: "assets/grid/03-one-of-ritz-carlton-nomad.webp",
     label: "One Of x Ritz-carlton Nomad",
-    description:
-      "Makeup by Anna Kurihara for One Of x Ritz-carlton Nomad.",
+    description: placeholderDescription,
   },
   {
     index: 3,
@@ -141,14 +145,14 @@ const works = [
     src: "assets/grid/07-kangol.mp4",
     poster: "assets/grid/07-kangol.webp",
     label: "Kangol",
-    description: "Makeup by Anna Kurihara for Kangol.",
+    description: placeholderDescription,
   },
   {
     index: 4,
     type: "image",
     src: "assets/grid/04-one-of.webp",
     label: "One Of",
-    description: "Makeup by Anna Kurihara for One Of.",
+    description: placeholderDescription,
   },
   {
     index: 5,
@@ -156,21 +160,21 @@ const works = [
     src: "assets/grid/08-gh-bass.mp4",
     poster: "assets/grid/08-gh-bass.webp",
     label: "G.H. Bass",
-    description: "Makeup by Anna Kurihara for G.H. Bass.",
+    description: placeholderDescription,
   },
   {
     index: 6,
     type: "image",
     src: "assets/grid/05-kaltblut.webp",
     label: "KALTBLUT",
-    description: "Makeup by Anna Kurihara for KALTBLUT.",
+    description: placeholderDescription,
   },
   {
     index: 7,
     type: "image",
     src: "assets/grid/06-nili-lotan.webp",
     label: "NILI LOTAN",
-    description: "Makeup by Anna Kurihara for NILI LOTAN.",
+    description: placeholderDescription,
   },
 ];
 
@@ -271,6 +275,9 @@ const dialog = document.querySelector(".work-dialog");
 const dialogMedia = document.querySelector(".work-dialog__media");
 const dialogLabel = document.querySelector(".work-dialog__label");
 const dialogDescription = document.querySelector(".work-dialog__description");
+const dialogDescriptionWrap = document.querySelector(
+  ".work-dialog__description-wrap"
+);
 const dialogClose = document.querySelector(".work-dialog__close");
 const dialogNavButtons = document.querySelectorAll("[data-dialog-dir]");
 const pageRegions = document.querySelectorAll(
@@ -303,6 +310,15 @@ const unlockPage = () => {
   window.scrollTo({ top: savedScrollY, left: 0, behavior: "instant" });
 };
 
+const updateDescriptionOverflow = () => {
+  if (!dialogDescription || !dialogDescriptionWrap) return;
+  const { scrollTop, scrollHeight, clientHeight } = dialogDescription;
+  const overflowing = scrollHeight > clientHeight + 1;
+  const atEnd = scrollTop + clientHeight >= scrollHeight - 1;
+  dialogDescriptionWrap.classList.toggle("is-overflowing", overflowing);
+  dialogDescriptionWrap.classList.toggle("is-scrolled-end", atEnd);
+};
+
 const renderDialog = (index) => {
   const work = works[index];
   if (!work || !dialogMedia || !dialogLabel || !dialogDescription) return;
@@ -326,7 +342,14 @@ const renderDialog = (index) => {
   }
 
   dialogLabel.textContent = work.label;
-  dialogDescription.textContent = work.description;
+  dialogDescription.replaceChildren(
+    ...work.description.map((paragraph) => {
+      const p = document.createElement("p");
+      p.textContent = paragraph;
+      return p;
+    })
+  );
+  requestAnimationFrame(updateDescriptionOverflow);
 };
 
 const stepWork = (direction) => {
@@ -339,6 +362,7 @@ const openWork = (index) => {
   lockPage();
   renderDialog(index);
   dialog.showModal();
+  requestAnimationFrame(updateDescriptionOverflow);
   dialogClose?.focus({ preventScroll: true });
 };
 
@@ -403,6 +427,11 @@ dialog?.addEventListener("keydown", (event) => {
     stepWork(1);
   }
 });
+
+dialogDescription?.addEventListener("scroll", updateDescriptionOverflow, {
+  passive: true,
+});
+window.addEventListener("resize", updateDescriptionOverflow);
 
 dialogClose?.addEventListener("click", closeWork);
 
