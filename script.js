@@ -14,7 +14,14 @@ if (carousel && track) {
 
   let offset = 0;
   let paused = prefersReducedMotion;
+  let animating = false;
+  let animStartOffset = 0;
+  let targetOffset = 0;
+  let animStartTime = 0;
   const speed = 0.45;
+  const animDuration = 560;
+
+  const easeOutCubic = (t) => 1 - (1 - t) ** 3;
 
   const loopWidth = () => track.scrollWidth / 2;
 
@@ -42,9 +49,27 @@ if (carousel && track) {
 
   const step = (direction) => {
     pause();
-    offset += direction * stride();
-    wrapOffset();
-    applyTransform();
+    const delta = direction * stride();
+    if (!delta) return;
+
+    if (prefersReducedMotion) {
+      offset += delta;
+      wrapOffset();
+      applyTransform();
+      return;
+    }
+
+    const width = loopWidth();
+    if (direction < 0 && offset < 1) {
+      offset += width;
+    } else if (direction > 0 && offset >= width - 1) {
+      offset -= width;
+    }
+
+    animStartOffset = offset;
+    targetOffset = (animating ? targetOffset : offset) + delta;
+    animStartTime = performance.now();
+    animating = true;
   };
 
   controlButtons.forEach((button) => {
@@ -64,8 +89,18 @@ if (carousel && track) {
     }
   });
 
-  const tick = () => {
-    if (!paused) {
+  const tick = (now) => {
+    if (animating) {
+      const t = Math.min(1, (now - animStartTime) / animDuration);
+      offset = animStartOffset + (targetOffset - animStartOffset) * easeOutCubic(t);
+      applyTransform();
+      if (t >= 1) {
+        offset = targetOffset;
+        wrapOffset();
+        applyTransform();
+        animating = false;
+      }
+    } else if (!paused) {
       offset += speed;
       wrapOffset();
       applyTransform();
@@ -199,9 +234,17 @@ if (mediaGrid) {
       video.src = work.src;
       video.poster = work.poster;
       video.muted = true;
+      video.defaultMuted = true;
       video.playsInline = true;
-      video.preload = "metadata";
+      video.loop = true;
+      video.autoplay = !prefersReducedMotion;
+      video.preload = "auto";
+      video.setAttribute("muted", "");
+      video.setAttribute("playsinline", "");
       video.setAttribute("aria-hidden", "true");
+      if (!prefersReducedMotion) {
+        video.play().catch(() => {});
+      }
       frame.appendChild(video);
     } else {
       const image = document.createElement("img");
