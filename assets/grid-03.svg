@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="Placeholder photograph of a kitchen sink">
-  <rect width="800" height="1000" fill="#d8d4cb"/>
-  <rect x="80" y="220" width="640" height="420" fill="#9aa0a6"/>
-  <rect x="120" y="260" width="560" height="280" fill="#7d848b"/>
-  <ellipse cx="400" cy="400" rx="90" ry="36" fill="#5d646b"/>
-  <rect x="388" y="200" width="24" height="90" fill="#6f6a62"/>
-  <circle cx="620" cy="300" r="18" fill="#b42318"/>
-  <rect y="780" width="800" height="220" fill="#b7b1a6"/>
-</svg>
