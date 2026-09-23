@@ -121,6 +121,22 @@ const works = [
     label: "NILI LOTAN",
     description: "Makeup by Anna Kurihara for NILI LOTAN.",
   },
+  {
+    index: 6,
+    type: "video",
+    src: "assets/grid/07-kangol.mp4",
+    poster: "assets/grid/07-kangol.webp",
+    label: "Kangol",
+    description: "Makeup by Anna Kurihara for Kangol.",
+  },
+  {
+    index: 7,
+    type: "video",
+    src: "assets/grid/08-gh-bass.mp4",
+    poster: "assets/grid/08-gh-bass.webp",
+    label: "G.H. Bass",
+    description: "Makeup by Anna Kurihara for G.H. Bass.",
+  },
 ];
 
 const mediaGrid = document.querySelector(".media-grid");
