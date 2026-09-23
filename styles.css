@@ -151,6 +151,7 @@ body {
 .media-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: dense;
   gap: 0.5rem;
 }
 
@@ -175,6 +176,14 @@ body {
 
 .media-item--video {
   grid-column: span 2;
+}
+
+.media-item--video-left {
+  grid-column: 1 / 3;
+}
+
+.media-item--video-right {
+  grid-column: 2 / 4;
 }
 
 .media-item__frame {
@@ -207,6 +216,17 @@ body {
 @media (max-width: 40rem) {
   .media-grid {
     grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row;
+  }
+
+  .media-item {
+    order: var(--mobile-order, 0);
+  }
+
+  .media-item--video,
+  .media-item--video-left,
+  .media-item--video-right {
+    grid-column: 1 / -1;
   }
 }
 

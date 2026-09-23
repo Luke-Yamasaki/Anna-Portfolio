@@ -102,27 +102,6 @@ const works = [
   },
   {
     index: 3,
-    type: "image",
-    src: "assets/grid/04-one-of.webp",
-    label: "One Of",
-    description: "Makeup by Anna Kurihara for One Of.",
-  },
-  {
-    index: 4,
-    type: "image",
-    src: "assets/grid/05-kaltblut.webp",
-    label: "KALTBLUT",
-    description: "Makeup by Anna Kurihara for KALTBLUT.",
-  },
-  {
-    index: 5,
-    type: "image",
-    src: "assets/grid/06-nili-lotan.webp",
-    label: "NILI LOTAN",
-    description: "Makeup by Anna Kurihara for NILI LOTAN.",
-  },
-  {
-    index: 6,
     type: "video",
     src: "assets/grid/07-kangol.mp4",
     poster: "assets/grid/07-kangol.webp",
@@ -130,23 +109,86 @@ const works = [
     description: "Makeup by Anna Kurihara for Kangol.",
   },
   {
-    index: 7,
+    index: 4,
+    type: "image",
+    src: "assets/grid/04-one-of.webp",
+    label: "One Of",
+    description: "Makeup by Anna Kurihara for One Of.",
+  },
+  {
+    index: 5,
     type: "video",
     src: "assets/grid/08-gh-bass.mp4",
     poster: "assets/grid/08-gh-bass.webp",
     label: "G.H. Bass",
     description: "Makeup by Anna Kurihara for G.H. Bass.",
   },
+  {
+    index: 6,
+    type: "image",
+    src: "assets/grid/05-kaltblut.webp",
+    label: "KALTBLUT",
+    description: "Makeup by Anna Kurihara for KALTBLUT.",
+  },
+  {
+    index: 7,
+    type: "image",
+    src: "assets/grid/06-nili-lotan.webp",
+    label: "NILI LOTAN",
+    description: "Makeup by Anna Kurihara for NILI LOTAN.",
+  },
 ];
+
+const packWorksForMobile = (items) => {
+  const packed = [];
+  const pendingImages = [];
+
+  const flushImages = () => {
+    packed.push(...pendingImages);
+    pendingImages.length = 0;
+  };
+
+  items.forEach((item) => {
+    if (item.type === "image") {
+      pendingImages.push(item);
+      return;
+    }
+
+    if (pendingImages.length % 2 === 1) {
+      const orphan = pendingImages.pop();
+      flushImages();
+      packed.push(item);
+      pendingImages.push(orphan);
+      return;
+    }
+
+    flushImages();
+    packed.push(item);
+  });
+
+  flushImages();
+  return packed;
+};
+
+const mobileOrderByIndex = new Map(
+  packWorksForMobile(works).map((work, order) => [work.index, order])
+);
 
 const mediaGrid = document.querySelector(".media-grid");
 
 if (mediaGrid) {
   const fragment = document.createDocumentFragment();
+  let videoCount = 0;
 
   works.forEach((work) => {
     const item = document.createElement("article");
     item.className = `media-item media-item--${work.type}`;
+    if (work.type === "video") {
+      const side = videoCount % 2 === 0 ? "left" : "right";
+      item.classList.add(`media-item--video-${side}`);
+      videoCount += 1;
+    }
+    item.style.setProperty("--mobile-order", String(mobileOrderByIndex.get(work.index)));
     item.dataset.index = String(work.index);
 
     const frame = document.createElement("div");
