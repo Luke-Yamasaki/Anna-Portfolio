@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Placeholder portrait of Anna Kurihara">
+  <rect width="1280" height="720" fill="#c9c2b2"/>
+  <rect y="480" width="1280" height="240" fill="#6f6a62"/>
+  <circle cx="640" cy="300" r="120" fill="#2b2722"/>
+  <rect x="520" y="420" width="240" height="220" fill="#3a332c"/>
+  <rect x="80" y="80" width="160" height="12" fill="#141414"/>
+  <rect x="1040" y="80" width="160" height="12" fill="#141414"/>
+</svg>

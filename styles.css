@@ -333,9 +333,52 @@ body {
 .site-footer {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
   gap: var(--gap);
   padding: var(--pad);
   border-top: 1px solid var(--frame);
+}
+
+.site-footer__bio {
+  flex: 1 1 18rem;
+  margin: 0;
+  max-width: 40rem;
+  color: var(--slate);
+}
+
+.site-footer__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  flex: 0 1 20rem;
+  width: min(20rem, 100%);
+}
+
+.site-footer__portrait {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--frame);
+}
+
+.site-footer__contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: inherit;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.site-footer__contact:hover {
+  background: var(--leader);
+  border-color: var(--leader);
 }
 
 @media (prefers-reduced-motion: reduce) {
