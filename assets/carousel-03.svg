@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300" role="img" aria-label="Placeholder still of a shoreline">
-  <rect width="480" height="300" fill="#8aa0a8"/>
-  <rect y="170" width="480" height="130" fill="#c9c2b2"/>
-  <path d="M0 170 C80 150 160 190 240 168 C320 146 400 180 480 160 L480 190 L0 190 Z" fill="#6f6a62"/>
-  <circle cx="390" cy="70" r="28" fill="#f4f3ee"/>
-</svg>
