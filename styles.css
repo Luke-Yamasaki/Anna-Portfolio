@@ -117,6 +117,33 @@ body {
   background: var(--frame);
 }
 
+.carousel-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.carousel-controls__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.carousel-controls__btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 .site-footer {
   display: flex;
   flex-direction: row;
