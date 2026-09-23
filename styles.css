@@ -369,10 +369,17 @@ body {
   border: 0;
   background: transparent;
   color: var(--ink);
-  font-family: var(--font-display);
+  font-family: system-ui, sans-serif;
   font-size: 1.125rem;
   line-height: 1;
   cursor: pointer;
+}
+
+.work-dialog__close:focus,
+.work-dialog__close:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+  background: transparent;
 }
 
 .work-dialog__body {
