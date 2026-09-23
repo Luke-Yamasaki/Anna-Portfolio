@@ -250,6 +250,28 @@ body {
   gap: 1rem;
 }
 
+.work-dialog__nav {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.work-dialog__nav:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 .work-dialog__center {
   display: flex;
   flex-direction: row;

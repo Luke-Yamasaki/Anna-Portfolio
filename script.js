@@ -209,6 +209,7 @@ const dialogMedia = document.querySelector(".work-dialog__media");
 const dialogLabel = document.querySelector(".work-dialog__label");
 const dialogDescription = document.querySelector(".work-dialog__description");
 const dialogClose = document.querySelector(".work-dialog__close");
+const dialogNavButtons = document.querySelectorAll("[data-dialog-dir]");
 
 let currentIndex = 0;
 
@@ -236,6 +237,11 @@ const renderDialog = (index) => {
 
   dialogLabel.textContent = work.label;
   dialogDescription.textContent = work.description;
+};
+
+const stepWork = (direction) => {
+  const nextIndex = (currentIndex + direction + works.length) % works.length;
+  renderDialog(nextIndex);
 };
 
 const openWork = (index) => {
@@ -269,6 +275,24 @@ if (mediaGrid) {
     }
   });
 }
+
+dialogNavButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    stepWork(Number(button.dataset.dialogDir));
+  });
+});
+
+dialog?.addEventListener("keydown", (event) => {
+  if (!dialog.open) return;
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    stepWork(-1);
+  }
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    stepWork(1);
+  }
+});
 
 dialogClose?.addEventListener("click", closeWork);
 
