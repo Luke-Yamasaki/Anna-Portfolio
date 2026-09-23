@@ -273,8 +273,35 @@ const dialogLabel = document.querySelector(".work-dialog__label");
 const dialogDescription = document.querySelector(".work-dialog__description");
 const dialogClose = document.querySelector(".work-dialog__close");
 const dialogNavButtons = document.querySelectorAll("[data-dialog-dir]");
+const pageRegions = document.querySelectorAll(
+  ".skip-link, .site-header, .site-main, .site-footer"
+);
 
 let currentIndex = 0;
+let savedScrollY = 0;
+
+const dialogFocusable = () =>
+  [...dialog.querySelectorAll(
+    'button, [href], video[controls], [tabindex]:not([tabindex="-1"])'
+  )].filter((el) => !el.hasAttribute("disabled"));
+
+const lockPage = () => {
+  savedScrollY = window.scrollY;
+  document.documentElement.classList.add("is-dialog-open");
+  document.body.style.top = `-${savedScrollY}px`;
+  pageRegions.forEach((el) => {
+    el.inert = true;
+  });
+};
+
+const unlockPage = () => {
+  document.documentElement.classList.remove("is-dialog-open");
+  document.body.style.top = "";
+  pageRegions.forEach((el) => {
+    el.inert = false;
+  });
+  window.scrollTo({ top: savedScrollY, left: 0, behavior: "instant" });
+};
 
 const renderDialog = (index) => {
   const work = works[index];
@@ -309,8 +336,10 @@ const stepWork = (direction) => {
 
 const openWork = (index) => {
   if (!dialog) return;
+  lockPage();
   renderDialog(index);
   dialog.showModal();
+  dialogClose?.focus({ preventScroll: true });
 };
 
 const closeWork = () => {
@@ -347,6 +376,24 @@ dialogNavButtons.forEach((button) => {
 
 dialog?.addEventListener("keydown", (event) => {
   if (!dialog.open) return;
+
+  if (event.key === "Tab") {
+    const focusable = dialogFocusable();
+    if (focusable.length === 0) {
+      event.preventDefault();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  }
+
   if (event.key === "ArrowLeft") {
     event.preventDefault();
     stepWork(-1);
@@ -370,4 +417,5 @@ dialog?.addEventListener("close", () => {
   if (playing) {
     playing.pause();
   }
+  unlockPage();
 });
