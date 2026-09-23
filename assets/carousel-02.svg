@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300" role="img" aria-label="Placeholder still of a red corridor">
+  <rect width="480" height="300" fill="#2a0f0c"/>
+  <polygon points="80,300 200,40 280,40 400,300" fill="#b42318"/>
+  <polygon points="200,40 240,0 280,40" fill="#7a1a12"/>
+  <rect x="232" y="80" width="16" height="220" fill="#3a1210"/>
+  <ellipse cx="240" cy="260" rx="90" ry="12" fill="#1a0a08"/>
+</svg>
