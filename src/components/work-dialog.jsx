@@ -2,57 +2,40 @@
 
 import {useEffect, useRef} from 'react'
 import {PortableText} from 'next-sanity'
+import {
+  pauseDialogMedia,
+  trapDialogTab,
+  updateDescriptionOverflow,
+} from '@/lib/dialog'
+import {handleHorizontalArrows} from '@/lib/keyboard'
 import {WorkMedia} from './work-media'
 import styles from './work-dialog.module.css'
 
-export function WorkDialog({
-  dialogRef,
-  work,
-  onClose,
-  onStep,
-  descriptionRef,
-  descriptionWrapRef,
-}) {
+export function WorkDialog({dialogRef, work, onClose, onStep}) {
   const mediaRef = useRef(null)
+  const descriptionRef = useRef(null)
+  const descriptionWrapRef = useRef(null)
+
+  const syncOverflow = () => {
+    updateDescriptionOverflow(descriptionRef.current, descriptionWrapRef.current, {
+      overflowing: styles.isOverflowing,
+      scrolledEnd: styles.isScrolledEnd,
+    })
+  }
+
+  useEffect(() => {
+    requestAnimationFrame(syncOverflow)
+  }, [work])
 
   useEffect(() => {
     const dialog = dialogRef.current
+    const description = descriptionRef.current
     if (!dialog) return
 
     const onKeyDown = (event) => {
       if (!dialog.open) return
-
-      if (event.key === 'Tab') {
-        const focusable = [
-          ...dialog.querySelectorAll(
-            'button, [href], video[controls], [tabindex]:not([tabindex="-1"])',
-          ),
-        ].filter((el) => !el.hasAttribute('disabled'))
-
-        if (focusable.length === 0) {
-          event.preventDefault()
-          return
-        }
-
-        const first = focusable[0]
-        const last = focusable[focusable.length - 1]
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault()
-          last.focus({preventScroll: true})
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault()
-          first.focus({preventScroll: true})
-        }
-      }
-
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault()
-        onStep(-1)
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault()
-        onStep(1)
-      }
+      trapDialogTab(event, dialog)
+      handleHorizontalArrows(event, onStep)
     }
 
     const onClick = (event) => {
@@ -60,19 +43,31 @@ export function WorkDialog({
     }
 
     const onDialogClose = () => {
-      mediaRef.current?.querySelector('video, mux-player')?.pause()
+      pauseDialogMedia(mediaRef.current)
     }
 
     dialog.addEventListener('keydown', onKeyDown)
     dialog.addEventListener('click', onClick)
     dialog.addEventListener('close', onDialogClose)
+    description?.addEventListener('scroll', syncOverflow, {passive: true})
+    window.addEventListener('resize', syncOverflow)
 
     return () => {
       dialog.removeEventListener('keydown', onKeyDown)
       dialog.removeEventListener('click', onClick)
       dialog.removeEventListener('close', onDialogClose)
+      description?.removeEventListener('scroll', syncOverflow)
+      window.removeEventListener('resize', syncOverflow)
     }
   }, [dialogRef, onClose, onStep])
+
+  const stepPrevious = () => {
+    onStep(-1)
+  }
+
+  const stepNext = () => {
+    onStep(1)
+  }
 
   return (
     <dialog
@@ -95,7 +90,7 @@ export function WorkDialog({
             type="button"
             className={styles.nav}
             aria-label="Previous work"
-            onClick={() => onStep(-1)}
+            onClick={stepPrevious}
           >
             <span aria-hidden="true">←</span>
           </button>
@@ -120,7 +115,7 @@ export function WorkDialog({
             type="button"
             className={styles.nav}
             aria-label="Next work"
-            onClick={() => onStep(1)}
+            onClick={stepNext}
           >
             <span aria-hidden="true">→</span>
           </button>

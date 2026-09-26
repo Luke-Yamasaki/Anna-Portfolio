@@ -1,6 +1,8 @@
 'use client'
 
 import {useEffect, useRef} from 'react'
+import {handleHorizontalArrows} from '@/lib/keyboard'
+import {easeOutCubic, prefersReducedMotion} from '@/lib/motion'
 import styles from './hero-carousel.module.css'
 
 export function HeroCarousel({slides}) {
@@ -13,13 +15,11 @@ export function HeroCarousel({slides}) {
     const track = trackRef.current
     if (!carousel || !track || slides.length === 0) return
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
+    const reduceMotion = prefersReducedMotion()
 
     const state = {
       offset: 0,
-      paused: prefersReducedMotion,
+      paused: reduceMotion,
       animating: false,
       animStartOffset: 0,
       targetOffset: 0,
@@ -28,8 +28,6 @@ export function HeroCarousel({slides}) {
 
     const speed = 0.45
     const animDuration = 560
-    const easeOutCubic = (t) => 1 - (1 - t) ** 3
-
     const loopWidth = () => track.scrollWidth / 2
 
     const applyTransform = () => {
@@ -55,7 +53,7 @@ export function HeroCarousel({slides}) {
       const delta = direction * stride()
       if (!delta) return
 
-      if (prefersReducedMotion) {
+      if (reduceMotion) {
         state.offset += delta
         wrapOffset()
         applyTransform()
@@ -78,14 +76,7 @@ export function HeroCarousel({slides}) {
     stepRef.current = step
 
     const onKeyDown = (event) => {
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault()
-        step(-1)
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault()
-        step(1)
-      }
+      handleHorizontalArrows(event, step)
     }
 
     carousel.addEventListener('keydown', onKeyDown)
@@ -117,9 +108,23 @@ export function HeroCarousel({slides}) {
     }
   }, [slides])
 
+  const stepPrevious = () => {
+    stepRef.current(-1)
+  }
+
+  const stepNext = () => {
+    stepRef.current(1)
+  }
+
+  const renderSlide = (slide, index) => (
+    <li key={`${slide.key}-${index}`} className={styles.slide}>
+      <img src={slide.src} alt={slide.alt} />
+    </li>
+  )
+
   if (!slides?.length) return null
 
-  const looped = [...slides, ...slides]
+  const slideItems = [...slides, ...slides].map(renderSlide)
 
   return (
     <section className={styles.hero} aria-label="Featured work">
@@ -132,11 +137,7 @@ export function HeroCarousel({slides}) {
       >
         <div className={styles.viewport}>
           <ul ref={trackRef} className={styles.track}>
-            {looped.map((slide, index) => (
-              <li key={`${slide.key}-${index}`} className={styles.slide}>
-                <img src={slide.src} alt={slide.alt} />
-              </li>
-            ))}
+            {slideItems}
           </ul>
         </div>
       </div>
@@ -145,7 +146,7 @@ export function HeroCarousel({slides}) {
           type="button"
           className={styles.button}
           aria-label="Previous featured still"
-          onClick={() => stepRef.current(-1)}
+          onClick={stepPrevious}
         >
           <span aria-hidden="true">←</span>
         </button>
@@ -153,7 +154,7 @@ export function HeroCarousel({slides}) {
           type="button"
           className={styles.button}
           aria-label="Next featured still"
-          onClick={() => stepRef.current(1)}
+          onClick={stepNext}
         >
           <span aria-hidden="true">→</span>
         </button>
