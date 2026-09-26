@@ -17,7 +17,6 @@ export const HOME_PAGE_QUERY = defineQuery(`
       mediaType,
       image,
       poster,
-      videoUrl,
       video {
         asset->{
           playbackId,

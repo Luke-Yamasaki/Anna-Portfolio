@@ -3,8 +3,8 @@
   inset: 0;
   margin: auto;
   width: min(90vw, 80rem);
-  height: min(85dvh, 90vh);
-  max-height: min(85dvh, 90vh);
+  height: min(92dvh, 94vh);
+  max-height: min(92dvh, 94vh);
   padding: 2.5rem 1.5rem 1.5rem;
   border: 1px solid var(--frame);
   border-radius: 0.5rem;
@@ -41,11 +41,13 @@
   cursor: pointer;
 }
 
-.close:focus,
+.close:focus {
+  outline: none;
+}
+
 .close:focus-visible {
-  outline: 1px solid var(--ink);
-  outline-offset: 3px;
-  background: transparent;
+  outline: 1px solid var(--frame);
+  outline-offset: 2px;
 }
 
 .body {
@@ -141,6 +143,7 @@
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 500;
+  line-height: 1.3;
   overflow-wrap: break-word;
 }
 
@@ -228,7 +231,7 @@
 
 @media (max-width: 80rem) {
   .dialog {
-    height: 70vh;
+    height: 90vh;
   }
 
   .center {

@@ -1,4 +1,4 @@
-import styles from './site-footer.module.css'
+import styles from './styles/site-footer.module.css'
 
 export function SiteFooter({bio, portraitSrc, portraitAlt, contactEmail}) {
   return (

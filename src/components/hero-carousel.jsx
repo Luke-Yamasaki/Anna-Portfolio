@@ -1,25 +1,23 @@
 'use client'
 
 import {useEffect, useRef} from 'react'
-import styles from './hero-carousel.module.css'
+import {handleHorizontalArrows} from '@/lib/keyboard'
+import {easeOutCubic, prefersReducedMotion} from '@/lib/motion'
+import styles from './styles/hero-carousel.module.css'
 
 export function HeroCarousel({slides}) {
-  const carouselRef = useRef(null)
   const trackRef = useRef(null)
   const stepRef = useRef(() => {})
 
   useEffect(() => {
-    const carousel = carouselRef.current
     const track = trackRef.current
-    if (!carousel || !track || slides.length === 0) return
+    if (!track || slides.length === 0) return
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
+    const reduceMotion = prefersReducedMotion()
 
     const state = {
       offset: 0,
-      paused: prefersReducedMotion,
+      paused: reduceMotion,
       animating: false,
       animStartOffset: 0,
       targetOffset: 0,
@@ -28,8 +26,6 @@ export function HeroCarousel({slides}) {
 
     const speed = 0.45
     const animDuration = 560
-    const easeOutCubic = (t) => 1 - (1 - t) ** 3
-
     const loopWidth = () => track.scrollWidth / 2
 
     const applyTransform = () => {
@@ -55,7 +51,7 @@ export function HeroCarousel({slides}) {
       const delta = direction * stride()
       if (!delta) return
 
-      if (prefersReducedMotion) {
+      if (reduceMotion) {
         state.offset += delta
         wrapOffset()
         applyTransform()
@@ -76,19 +72,6 @@ export function HeroCarousel({slides}) {
     }
 
     stepRef.current = step
-
-    const onKeyDown = (event) => {
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault()
-        step(-1)
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault()
-        step(1)
-      }
-    }
-
-    carousel.addEventListener('keydown', onKeyDown)
 
     let raf = requestAnimationFrame(function tick(now) {
       if (state.animating) {
@@ -113,48 +96,56 @@ export function HeroCarousel({slides}) {
 
     return () => {
       cancelAnimationFrame(raf)
-      carousel.removeEventListener('keydown', onKeyDown)
     }
   }, [slides])
 
+  const stepPrevious = () => {
+    stepRef.current(-1)
+  }
+
+  const stepNext = () => {
+    stepRef.current(1)
+  }
+
+  const onHeroKeyDown = (event) => {
+    handleHorizontalArrows(event, (direction) => {
+      stepRef.current(direction)
+    })
+  }
+
+  const renderSlide = (slide, index, {hidden = false} = {}) => (
+    <li
+      key={`${slide.key}-${hidden ? 'clone' : 'slide'}-${index}`}
+      className={styles.slide}
+      aria-hidden={hidden || undefined}
+    >
+      <img src={slide.src} alt={hidden ? '' : slide.alt} />
+    </li>
+  )
+
   if (!slides?.length) return null
 
-  const looped = [...slides, ...slides]
+  const slideItems = [
+    ...slides.map((slide, index) => renderSlide(slide, index)),
+    ...slides.map((slide, index) => renderSlide(slide, index, {hidden: true})),
+  ]
 
   return (
-    <section className={styles.hero} aria-label="Featured work">
-      <div
-        ref={carouselRef}
-        className={styles.carousel}
-        tabIndex={0}
-        aria-roledescription="carousel"
-        aria-label="Featured stills"
-      >
+    <section className={styles.hero} onKeyDown={onHeroKeyDown}>
+      <div className={styles.carousel}>
         <div className={styles.viewport}>
           <ul ref={trackRef} className={styles.track}>
-            {looped.map((slide, index) => (
-              <li key={`${slide.key}-${index}`} className={styles.slide}>
-                <img src={slide.src} alt={slide.alt} />
-              </li>
-            ))}
+            {slideItems}
           </ul>
         </div>
       </div>
       <div className={styles.controls}>
-        <button
-          type="button"
-          className={styles.button}
-          aria-label="Previous featured still"
-          onClick={() => stepRef.current(-1)}
-        >
+        <button type="button" className={styles.button} onClick={stepPrevious}>
+          <span className="visuallyHidden">Previous</span>
           <span aria-hidden="true">←</span>
         </button>
-        <button
-          type="button"
-          className={styles.button}
-          aria-label="Next featured still"
-          onClick={() => stepRef.current(1)}
-        >
+        <button type="button" className={styles.button} onClick={stepNext}>
+          <span className="visuallyHidden">Next</span>
           <span aria-hidden="true">→</span>
         </button>
       </div>
