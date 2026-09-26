@@ -8,7 +8,9 @@ export function SiteHeader({title}) {
       data-mode="header"
       data-sanity={siteStyleAttribute('spaceDensity')}
     >
-      <p className={styles.title}>{title}</p>
+      <p className={styles.title} data-sanity={siteStyleAttribute('displaySize')}>
+        {title}
+      </p>
     </header>
   )
 }

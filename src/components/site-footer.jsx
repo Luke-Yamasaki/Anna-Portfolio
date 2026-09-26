@@ -11,7 +11,13 @@ export function SiteFooter({bio, portraitSrc, portraitAlt, contactEmail}) {
       data-mode="footer"
       data-sanity={siteStyleAttribute('spaceDensity')}
     >
-      {bio ? <p className={styles.bio}>{bio}</p> : <div />}
+      {bio ? (
+        <p className={styles.bio} data-sanity={siteStyleAttribute('titleSize')}>
+          {bio}
+        </p>
+      ) : (
+        <div />
+      )}
       <div className={styles.aside}>
         {portraitSrc ? (
           <img className={styles.portrait} src={portraitSrc} alt={portraitAlt || ''} />

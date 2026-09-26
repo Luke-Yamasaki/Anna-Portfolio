@@ -8,6 +8,6 @@
 .pageTitle {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: var(--type-title-size);
   font-weight: 500;
 }

@@ -3,6 +3,7 @@ import {SelectedWork} from '@/components/selected-work'
 import {SiteFooter} from '@/components/site-footer'
 import {SiteHeader} from '@/components/site-header'
 import {mapFeaturedStills, mapWorks} from '@/lib/home-page'
+import {siteStyleAttribute} from '@/lib/site-style'
 import {imageUrl} from '@/sanity/image'
 import {sanityFetch} from '@/sanity/live'
 import {HOME_PAGE_QUERY} from '@/sanity/queries'
@@ -16,8 +17,10 @@ export default async function HomePage() {
   return (
     <>
       <SiteHeader title={data?.siteTitle || 'ANNA KURIHARA'} />
-      <main id="main" className={styles.main}>
-        <h1 className={styles.pageTitle}>{data?.pageTitle || 'Portfolio'}</h1>
+      <main id="main" className={styles.main} data-sanity={siteStyleAttribute('bodySize')}>
+        <h1 className={styles.pageTitle} data-sanity={siteStyleAttribute('titleSize')}>
+          {data?.pageTitle || 'Portfolio'}
+        </h1>
         <HeroCarousel slides={slides} />
         <SelectedWork works={works} />
       </main>

@@ -32,8 +32,11 @@ export const SITE_STYLE_QUERY = defineQuery(`
   *[_id == "siteStyle"][0]{
     displayFont,
     bodyFont,
+    displaySize,
+    titleSize,
+    bodySize,
     spaceDensity,
-    paper,
-    ink
+    "paper": coalesce(paper.hex, paper),
+    "ink": coalesce(ink.hex, ink)
   }
 `)

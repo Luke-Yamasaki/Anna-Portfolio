@@ -1,9 +1,5 @@
 import {createDataAttribute, stegaClean} from 'next-sanity'
-
-const FONT_STACKS = {
-  'orpheus-pro': '"orpheus-pro", Georgia, serif',
-  'adobe-garamond-pro': '"adobe-garamond-pro", Georgia, serif',
-}
+import {fontStack} from './fonts'
 
 const SPACE_DENSITY = {
   compact: {inset: '0.65rem', gap: '1.75rem'},
@@ -12,19 +8,43 @@ const SPACE_DENSITY = {
   loose: {inset: '2.25rem', gap: '5.5rem'},
 }
 
+const TYPE_SIZE = {
+  display: {
+    small: '1.75rem',
+    regular: '2.5rem',
+    large: '3.25rem',
+    extraLarge: '4rem',
+  },
+  title: {
+    small: '1.25rem',
+    regular: '2rem',
+    large: '2.5rem',
+    extraLarge: '3rem',
+  },
+  body: {
+    small: '0.875rem',
+    regular: '1rem',
+    large: '1.125rem',
+    extraLarge: '1.25rem',
+  },
+}
+
 const HEX_COLOR = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
 
 const DEFAULTS = {
   displayFont: 'orpheus-pro',
   bodyFont: 'adobe-garamond-pro',
+  displaySize: 'regular',
+  titleSize: 'regular',
+  bodySize: 'regular',
   spaceDensity: 'regular',
   paper: '#f4f3ee',
   ink: '#141414',
 }
 
-function fontStack(value, fallback) {
+function pickSize(scale, value, fallback) {
   const key = stegaClean(value) || fallback
-  return FONT_STACKS[key] || FONT_STACKS[fallback]
+  return scale[key] || scale[fallback]
 }
 
 function density(value) {
@@ -42,6 +62,9 @@ export function siteStyleVars(style) {
   return {
     '--font-display': fontStack(style?.displayFont, DEFAULTS.displayFont),
     '--font-body': fontStack(style?.bodyFont, DEFAULTS.bodyFont),
+    '--type-display-size': pickSize(TYPE_SIZE.display, style?.displaySize, DEFAULTS.displaySize),
+    '--type-title-size': pickSize(TYPE_SIZE.title, style?.titleSize, DEFAULTS.titleSize),
+    '--type-body-size': pickSize(TYPE_SIZE.body, style?.bodySize, DEFAULTS.bodySize),
     '--space-inset': space.inset,
     '--space-gap': space.gap,
     '--paper': hexColor(style?.paper, DEFAULTS.paper),

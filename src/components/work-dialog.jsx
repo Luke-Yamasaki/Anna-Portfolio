@@ -94,7 +94,11 @@ export function WorkDialog({dialogRef, work, onClose, onStep}) {
             {work ? <WorkMedia work={work} /> : null}
           </div>
           <div className={styles.copy}>
-            <h2 id="work-dialog-label" className={styles.label}>
+            <h2
+              id="work-dialog-label"
+              className={styles.label}
+              data-sanity={siteStyleAttribute('titleSize')}
+            >
               {work?.label}
             </h2>
             <div ref={descriptionWrapRef} className={styles.descriptionWrap}>
