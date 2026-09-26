@@ -1,0 +1,283 @@
+.dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(90vw, 80rem);
+  height: min(85dvh, 90vh);
+  max-height: min(85dvh, 90vh);
+  padding: 2.5rem 1.5rem 1.5rem;
+  border: 1px solid var(--frame);
+  border-radius: 0.5rem;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog::backdrop {
+  background: rgb(20 20 20 / 0.7);
+}
+
+.close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:focus,
+.close:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+  background: transparent;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex: 1 1 auto;
+  gap: 1rem;
+  min-width: 0;
+  min-height: 0;
+}
+
+.nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--frame);
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--slate);
+  font-family: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.nav:hover {
+  background: var(--slate);
+  color: var(--paper);
+}
+
+.navContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+}
+
+.center {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.media {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex: 1 1 50%;
+  max-width: 55%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.media img,
+.media video,
+.media mux-player {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  flex: 1 1 45%;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  text-align: left;
+}
+
+.label {
+  margin: 0;
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  overflow-wrap: break-word;
+}
+
+.descriptionWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.descriptionWrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.6rem;
+  bottom: 0;
+  height: 3rem;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 90% at 50% 100%,
+      color-mix(in srgb, var(--paper) 95%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(to top, var(--paper) 15%, transparent);
+  transition: opacity 0.2s ease;
+}
+
+.descriptionWrap.isOverflowing:not(.isScrolledEnd)::after {
+  opacity: 1;
+}
+
+.description {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  overflow-wrap: break-word;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--slate) var(--frame);
+}
+
+.description::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+.description::-webkit-scrollbar-track {
+  background: var(--frame);
+  border-radius: 999px;
+}
+
+.description::-webkit-scrollbar-thumb {
+  background: var(--slate);
+  border-radius: 999px;
+}
+
+.description p {
+  margin: 0 0 0.75rem;
+}
+
+.description p:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 64.01rem) {
+  .center:has(video) .media,
+  .center:has(mux-player) .media {
+    align-items: center;
+  }
+
+  .center:has(video) .copy,
+  .center:has(mux-player) .copy {
+    justify-content: center;
+  }
+
+  .center:has(video) .descriptionWrap,
+  .center:has(mux-player) .descriptionWrap {
+    flex: 0 1 auto;
+  }
+}
+
+@media (max-width: 80rem) {
+  .dialog {
+    height: 70vh;
+  }
+
+  .center {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .media {
+    flex: 1 1 55%;
+    width: 100%;
+    max-width: none;
+    max-height: 55%;
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .media img,
+  .media video,
+  .media mux-player {
+    object-position: left center;
+  }
+
+  .center:has(video) .media,
+  .center:has(mux-player) .media {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .center:has(video) .media video,
+  .center:has(mux-player) .media mux-player {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .copy {
+    flex: 1 1 45%;
+    width: 100%;
+    max-height: 45%;
+  }
+
+  .center:has(video) .copy,
+  .center:has(mux-player) .copy {
+    flex: 1 1 auto;
+    max-height: none;
+    justify-content: flex-start;
+  }
+}
