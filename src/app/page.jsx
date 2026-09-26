@@ -30,8 +30,8 @@ export default async function HomePage() {
       const type = work.mediaType === 'video' ? 'video' : 'image'
       const playbackId =
         work.video?.asset?.status === 'ready' ? work.video.asset.playbackId : ''
-      const src = type === 'video' ? work.videoUrl : imageUrl(work.image, 1400)
-      if (type === 'video' ? !playbackId && !src : !src) return null
+      const src = type === 'image' ? imageUrl(work.image, 1400) : ''
+      if (type === 'video' ? !playbackId : !src) return null
       return {
         id: work._id,
         index,
