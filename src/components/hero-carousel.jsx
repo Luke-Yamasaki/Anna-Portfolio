@@ -3,7 +3,7 @@
 import {useEffect, useRef} from 'react'
 import {handleHorizontalArrows} from '@/lib/keyboard'
 import {easeOutCubic, prefersReducedMotion} from '@/lib/motion'
-import styles from './hero-carousel.module.css'
+import styles from './styles/hero-carousel.module.css'
 
 export function HeroCarousel({slides}) {
   const carouselRef = useRef(null)

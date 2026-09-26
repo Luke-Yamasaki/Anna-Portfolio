@@ -1,4 +1,4 @@
-import styles from './site-header.module.css'
+import styles from './styles/site-header.module.css'
 
 export function SiteHeader({title}) {
   return (

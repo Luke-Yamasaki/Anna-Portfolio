@@ -9,7 +9,7 @@ import {
 } from '@/lib/dialog'
 import {handleHorizontalArrows} from '@/lib/keyboard'
 import {WorkMedia} from './work-media'
-import styles from './work-dialog.module.css'
+import styles from './styles/work-dialog.module.css'
 
 export function WorkDialog({dialogRef, work, onClose, onStep}) {
   const mediaRef = useRef(null)

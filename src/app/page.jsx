@@ -6,7 +6,7 @@ import {mapFeaturedStills, mapWorks} from '@/lib/home-page'
 import {client} from '@/sanity/client'
 import {imageUrl} from '@/sanity/image'
 import {HOME_PAGE_QUERY} from '@/sanity/queries'
-import styles from '@/components/home-page.module.css'
+import styles from '@/components/styles/home-page.module.css'
 
 const options = {next: {revalidate: 30}}
 

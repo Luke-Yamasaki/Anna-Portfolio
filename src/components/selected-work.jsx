@@ -6,7 +6,7 @@ import {prefersReducedMotion} from '@/lib/motion'
 import {decorateWorksForGrid, stepIndex, workItemClassName} from '@/lib/works'
 import {WorkDialog} from './work-dialog'
 import {WorkMedia} from './work-media'
-import styles from './media-grid.module.css'
+import styles from './styles/media-grid.module.css'
 
 export function SelectedWork({works}) {
   const dialogRef = useRef(null)
