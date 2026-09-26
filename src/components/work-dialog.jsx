@@ -8,6 +8,7 @@ import {
   updateDescriptionOverflow,
 } from '@/lib/dialog'
 import {handleHorizontalArrows} from '@/lib/keyboard'
+import {siteStyleAttribute} from '@/lib/site-style'
 import {WorkMedia} from './work-media'
 import styles from './styles/work-dialog.module.css'
 
@@ -70,7 +71,13 @@ export function WorkDialog({dialogRef, work, onClose, onStep}) {
   }
 
   return (
-    <dialog ref={dialogRef} className={styles.dialog} aria-labelledby="work-dialog-label">
+    <dialog
+      ref={dialogRef}
+      className={styles.dialog}
+      aria-labelledby="work-dialog-label"
+      data-mode="dialog"
+      data-sanity={siteStyleAttribute('spaceDensity')}
+    >
       <button type="button" className={styles.close} onClick={onClose}>
         <span className="visuallyHidden">Close</span>
         <span aria-hidden="true">X</span>

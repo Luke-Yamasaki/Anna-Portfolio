@@ -1,14 +1,18 @@
-:root {
+:root,
+[data-mode='page'] {
   --paper: #f4f3ee;
   --ink: #141414;
   --leader: #b42318;
   --slate: #6f6a62;
   --frame: #d8d4cb;
-  --gap: 3rem;
-  --pad: 1rem;
+  --space-inset: 1rem;
+  --space-gap: 3rem;
+  --pad: var(--space-inset);
+  --gap: var(--space-gap);
   --font-display: "orpheus-pro", Georgia, serif;
   --font-body: "adobe-garamond-pro", Georgia, serif;
 }
+
 
 @font-face {
   font-family: "orpheus-pro";

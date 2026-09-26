@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  padding: var(--pad);
+  padding: var(--space-inset);
   border-top: 1px solid var(--frame);
   font-family: var(--font-display);
 }

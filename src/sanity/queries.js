@@ -27,3 +27,13 @@ export const HOME_PAGE_QUERY = defineQuery(`
     }
   }
 `)
+
+export const SITE_STYLE_QUERY = defineQuery(`
+  *[_id == "siteStyle"][0]{
+    displayFont,
+    bodyFont,
+    spaceDensity,
+    paper,
+    ink
+  }
+`)

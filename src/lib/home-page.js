@@ -1,3 +1,4 @@
+import {stegaClean} from 'next-sanity'
 import {imageUrl} from '@/sanity/image'
 
 export function mapFeaturedStills(stills) {
@@ -13,7 +14,7 @@ export function mapFeaturedStills(stills) {
 export function mapWorks(works) {
   return (works ?? [])
     .map((work, index) => {
-      const type = work.mediaType === 'video' ? 'video' : 'image'
+      const type = stegaClean(work.mediaType) === 'video' ? 'video' : 'image'
       const playbackId =
         work.video?.asset?.status === 'ready' ? work.video.asset.playbackId : ''
       const src = type === 'image' ? imageUrl(work.image, 1400) : ''

@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: var(--pad);
+  padding: var(--space-inset);
   background: var(--paper);
   border-bottom: 1px solid var(--frame);
 }
