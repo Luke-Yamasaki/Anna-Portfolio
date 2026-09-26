@@ -6,14 +6,12 @@ import {easeOutCubic, prefersReducedMotion} from '@/lib/motion'
 import styles from './styles/hero-carousel.module.css'
 
 export function HeroCarousel({slides}) {
-  const carouselRef = useRef(null)
   const trackRef = useRef(null)
   const stepRef = useRef(() => {})
 
   useEffect(() => {
-    const carousel = carouselRef.current
     const track = trackRef.current
-    if (!carousel || !track || slides.length === 0) return
+    if (!track || slides.length === 0) return
 
     const reduceMotion = prefersReducedMotion()
 
@@ -75,12 +73,6 @@ export function HeroCarousel({slides}) {
 
     stepRef.current = step
 
-    const onKeyDown = (event) => {
-      handleHorizontalArrows(event, step)
-    }
-
-    carousel.addEventListener('keydown', onKeyDown)
-
     let raf = requestAnimationFrame(function tick(now) {
       if (state.animating) {
         const t = Math.min(1, (now - state.animStartTime) / animDuration)
@@ -104,7 +96,6 @@ export function HeroCarousel({slides}) {
 
     return () => {
       cancelAnimationFrame(raf)
-      carousel.removeEventListener('keydown', onKeyDown)
     }
   }, [slides])
 
@@ -116,25 +107,32 @@ export function HeroCarousel({slides}) {
     stepRef.current(1)
   }
 
-  const renderSlide = (slide, index) => (
-    <li key={`${slide.key}-${index}`} className={styles.slide}>
-      <img src={slide.src} alt={slide.alt} />
+  const onHeroKeyDown = (event) => {
+    handleHorizontalArrows(event, (direction) => {
+      stepRef.current(direction)
+    })
+  }
+
+  const renderSlide = (slide, index, {hidden = false} = {}) => (
+    <li
+      key={`${slide.key}-${hidden ? 'clone' : 'slide'}-${index}`}
+      className={styles.slide}
+      aria-hidden={hidden || undefined}
+    >
+      <img src={slide.src} alt={hidden ? '' : slide.alt} />
     </li>
   )
 
   if (!slides?.length) return null
 
-  const slideItems = [...slides, ...slides].map(renderSlide)
+  const slideItems = [
+    ...slides.map((slide, index) => renderSlide(slide, index)),
+    ...slides.map((slide, index) => renderSlide(slide, index, {hidden: true})),
+  ]
 
   return (
-    <section className={styles.hero} aria-label="Featured work">
-      <div
-        ref={carouselRef}
-        className={styles.carousel}
-        tabIndex={0}
-        aria-roledescription="carousel"
-        aria-label="Featured stills"
-      >
+    <section className={styles.hero} onKeyDown={onHeroKeyDown}>
+      <div className={styles.carousel}>
         <div className={styles.viewport}>
           <ul ref={trackRef} className={styles.track}>
             {slideItems}
@@ -142,20 +140,12 @@ export function HeroCarousel({slides}) {
         </div>
       </div>
       <div className={styles.controls}>
-        <button
-          type="button"
-          className={styles.button}
-          aria-label="Previous featured still"
-          onClick={stepPrevious}
-        >
+        <button type="button" className={styles.button} onClick={stepPrevious}>
+          <span className="visuallyHidden">Previous</span>
           <span aria-hidden="true">←</span>
         </button>
-        <button
-          type="button"
-          className={styles.button}
-          aria-label="Next featured still"
-          onClick={stepNext}
-        >
+        <button type="button" className={styles.button} onClick={stepNext}>
+          <span className="visuallyHidden">Next</span>
           <span aria-hidden="true">→</span>
         </button>
       </div>

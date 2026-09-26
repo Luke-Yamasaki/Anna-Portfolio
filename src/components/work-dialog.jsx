@@ -70,28 +70,15 @@ export function WorkDialog({dialogRef, work, onClose, onStep}) {
   }
 
   return (
-    <dialog
-      ref={dialogRef}
-      className={styles.dialog}
-      aria-modal="true"
-      aria-labelledby="work-dialog-label"
-    >
-      <button
-        type="button"
-        className={styles.close}
-        aria-label="Close"
-        onClick={onClose}
-      >
+    <dialog ref={dialogRef} className={styles.dialog} aria-labelledby="work-dialog-label">
+      <button type="button" className={styles.close} onClick={onClose}>
+        <span className="visuallyHidden">Close</span>
         <span aria-hidden="true">X</span>
       </button>
       <div className={styles.body}>
         <div className={styles.navContainer}>
-          <button
-            type="button"
-            className={styles.nav}
-            aria-label="Previous work"
-            onClick={stepPrevious}
-          >
+          <button type="button" className={styles.nav} onClick={stepPrevious}>
+            <span className="visuallyHidden">Previous work</span>
             <span aria-hidden="true">←</span>
           </button>
         </div>
@@ -100,9 +87,9 @@ export function WorkDialog({dialogRef, work, onClose, onStep}) {
             {work ? <WorkMedia work={work} /> : null}
           </div>
           <div className={styles.copy}>
-            <p id="work-dialog-label" className={styles.label}>
+            <h2 id="work-dialog-label" className={styles.label}>
               {work?.label}
-            </p>
+            </h2>
             <div ref={descriptionWrapRef} className={styles.descriptionWrap}>
               <div ref={descriptionRef} className={styles.description}>
                 {work?.description ? <PortableText value={work.description} /> : null}
@@ -111,12 +98,8 @@ export function WorkDialog({dialogRef, work, onClose, onStep}) {
           </div>
         </div>
         <div className={styles.navContainer}>
-          <button
-            type="button"
-            className={styles.nav}
-            aria-label="Next work"
-            onClick={stepNext}
-          >
+          <button type="button" className={styles.nav} onClick={stepNext}>
+            <span className="visuallyHidden">Next work</span>
             <span aria-hidden="true">→</span>
           </button>
         </div>

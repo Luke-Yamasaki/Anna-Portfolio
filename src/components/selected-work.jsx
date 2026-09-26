@@ -38,29 +38,19 @@ export function SelectedWork({works}) {
     openWork(Number(item.dataset.workIndex))
   }
 
-  const onGridKeyDown = (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return
-    const item = event.target.closest('[data-work-index]')
-    if (!item || event.target !== item) return
-    event.preventDefault()
-    openWork(Number(item.dataset.workIndex))
-  }
-
   const renderWorkItem = (work) => (
-    <article
+    <div
       key={work.id}
       className={workItemClassName(work, styles)}
       style={{'--mobile-order': String(work.mobileOrder)}}
-      tabIndex={0}
-      role="button"
-      aria-label={`Open ${work.label}`}
-      data-work-index={work.index}
     >
       <div className={styles.frame}>
         <WorkMedia work={work} preview autoPlay={!reduceMotion} />
       </div>
-      <p className={styles.label}>{work.label}</p>
-    </article>
+      <button type="button" className={styles.label} data-work-index={work.index}>
+        {work.label}
+      </button>
+    </div>
   )
 
   if (!works?.length) return null
@@ -69,12 +59,9 @@ export function SelectedWork({works}) {
 
   return (
     <>
-      <section className={styles.section} aria-label="Selected work">
-        <div
-          className={styles.grid}
-          onClick={onGridClick}
-          onKeyDown={onGridKeyDown}
-        >
+      <section className={styles.section}>
+        <h2 className="visuallyHidden">Selected work</h2>
+        <div className={styles.grid} onClick={onGridClick}>
           {workItems}
         </div>
       </section>

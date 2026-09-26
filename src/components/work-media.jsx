@@ -4,7 +4,7 @@ import MuxPlayer from '@mux/mux-player-react'
 
 export function WorkMedia({work, preview = false, autoPlay = preview}) {
   if (work.type !== 'video') {
-    return <img src={work.src} alt={work.label} />
+    return <img src={work.src} alt="" />
   }
 
   if (!work.playbackId) return null
@@ -25,8 +25,7 @@ export function WorkMedia({work, preview = false, autoPlay = preview}) {
         '--controls': preview ? 'none' : undefined,
         '--media-object-fit': preview ? 'cover' : 'contain',
       }}
-      aria-hidden={preview || undefined}
-      aria-label={preview ? undefined : work.label}
+      tabIndex={preview ? -1 : undefined}
     />
   )
 }

@@ -14,7 +14,7 @@ export default function RootLayout({children}) {
     <html lang="en">
       <body>
         <a className={styles.skipLink} href="#main">
-          Skip to main
+          Skip to main content
         </a>
         {children}
       </body>
